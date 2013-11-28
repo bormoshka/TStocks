@@ -1,0 +1,75 @@
+@mixin view {
+	$panelHeight: 38px;
+	$paneItemFontSeze: 18px;
+
+	.view-panel { 
+		height: $panelHeight;
+		background: #cccccc url('img/dusty-view-panel.png') repeat-x;
+		.v-panel-content-view-panel {
+			background: none;
+		}
+		.view-name {
+			font-size: 12px;
+			font-weight: 600;
+			text-transform: uppercase;
+			display: block;
+			padding: 10px;
+			height: 100%;
+		}
+		.view-menu {
+			background: none;
+			background-image: none;
+			color: #333333;
+			height: 100%;
+			text-shadow: rgba(255, 255, 255, 0.9) 0 1px 0;
+			.v-menubar-menuitem {
+				padding: 9px 8px;
+				line-height: 16px;
+				height: $paneItemFontSeze;
+				.v-menubar-menuitem-caption {
+					font-size: $paneItemFontSeze;
+				}
+				&:hover{
+					background-color: rgba(0,0,0,0.2);
+					.v-menubar-menuitem-caption {
+						color: #000;
+					}
+				}
+			}
+			.v-menubar-menuitem-selected{
+				background-color: rgba(0,0,0,0.5);
+				background-image: none;
+				.v-menubar-menuitem-caption {
+					background-image: none;
+					color: #fff;
+				}
+				&:hover{
+					background-color: rgba(0,0,0,0.5);
+					background-image: none;
+					.v-menubar-menuitem-caption {
+						color: #fff;
+					}
+				}
+			}			
+		}
+
+	}
+	.v-menubar-submenu-view-menu {
+		.v-menubar-menuitem-selected{
+				background-color: rgba(0,0,0,0.5);
+				background-image: none;
+				text-shadow: rgba(255, 255, 255, 0.9) 0 1px 0;
+		}		
+		.v-menubar-menuitem{
+			padding: 5px 26px 5px 10px;
+			line-height: 16px;
+			font-size: $paneItemFontSeze - 3px;
+			&:hover{
+				background-color: rgba(0,0,0,0.2);
+				.v-menubar-menuitem-caption {
+					color: #000;
+				}
+			}
+		}
+	}
+}

@@ -1,6 +1,7 @@
 package ru.bormoshka.tstocks.DAO.entities;
 // Generated Nov 21, 2013 2:12:48 AM by Hibernate Tools 3.6.0
 
+import com.vaadin.data.util.BeanItem;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,17 +15,17 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Category")
 public class Category extends AbstractEntity implements java.io.Serializable {
-	
+
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "id", unique = true, nullable = false)	
+	@Column(name = "id", unique = true, nullable = false)
 	private Long id;
-	
-	@Column(name = "name", length = 45)
-	private String name;
-	
+
+	@Column(name = "name", unique = true, nullable = false, length = 45)
+	private String name = "";
+
 	@Column(name = "description", length = 65535)
-	private String description;
+	private String description = "";
 
 	public Category() {
 	}
@@ -34,7 +35,6 @@ public class Category extends AbstractEntity implements java.io.Serializable {
 		this.description = description;
 	}
 
-	
 	public Long getId() {
 		return this.id;
 	}
@@ -43,7 +43,6 @@ public class Category extends AbstractEntity implements java.io.Serializable {
 		this.id = id;
 	}
 
-	
 	public String getName() {
 		return this.name;
 	}
@@ -52,7 +51,6 @@ public class Category extends AbstractEntity implements java.io.Serializable {
 		this.name = name;
 	}
 
-	
 	public String getDescription() {
 		return this.description;
 	}

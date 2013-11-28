@@ -31,6 +31,9 @@ public class Unit extends AbstractEntity implements java.io.Serializable {
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "id", unique = true, nullable = false)
 	private Long id;
+	
+	@Column(name = "parent_id", nullable = false)
+	private Long parentId;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "date_begin", nullable = false, length = 10)
@@ -42,7 +45,8 @@ public class Unit extends AbstractEntity implements java.io.Serializable {
 
 	@Column(name = "name", nullable = false, length = 512)
 	private String name;
-
+	
+	
 	@Column(name = "status", nullable = false)
 	private Status status;
 
@@ -53,11 +57,16 @@ public class Unit extends AbstractEntity implements java.io.Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "unit_type_id", nullable = false, referencedColumnName = "id")
 	private UnitType unitType;
-
+	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "unit_id")
 	private Set<UnitPropertyValue> propertyValues = new HashSet<UnitPropertyValue>(0);
+	
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@Fetch(FetchMode.JOIN)
+	@JoinColumn(name = "parent_id")
+	private Set<Unit> childs;
 
 	public boolean validate() {
 		if (name == null || name.equals("") || name.length() > 512) {
@@ -159,6 +168,22 @@ public class Unit extends AbstractEntity implements java.io.Serializable {
 
 	public void setPropertyValues(Set<UnitPropertyValue> propertyValues) {
 		this.propertyValues = propertyValues;
+	}
+
+	public Long getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
+	}
+
+	public Set<Unit> getChilds() {
+		return childs;
+	}
+
+	public void setChilds(Set<Unit> childs) {
+		this.childs = childs;
 	}
 	
 }

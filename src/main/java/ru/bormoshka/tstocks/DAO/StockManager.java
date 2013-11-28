@@ -1,61 +1,24 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package ru.bormoshka.tstocks.DAO;
 
 import java.util.List;
-import java.util.Set;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.bormoshka.tstocks.DAO.entities.AbstractEntity;
-import ru.bormoshka.tstocks.DAO.entities.Composite;
-import ru.bormoshka.tstocks.DAO.entities.Location;
+import ru.bormoshka.tstocks.DAO.entities.Category;
 import ru.bormoshka.tstocks.DAO.entities.Unit;
 
 /**
  *
  * @author 45
  */
-public class StockManager {	
+public class StockManager extends AbstractDAO {
+	
 	protected static Configuration config;
-	@Autowired
-    private SessionFactory sessionFactory;
-
-	public List<Unit> getAllUnits() {
-		Session session = sessionFactory.getCurrentSession();		
-		session.beginTransaction();
-				
-		List<Unit> units = session.createQuery("from Unit").list();
-				
-		session.getTransaction().commit();
-		
-		return units;
-	}
 	
-	@Deprecated
-	public Set<Composite> getAllCompositesInLocation(Location location) {
-		Session session = sessionFactory.getCurrentSession();		
-		session.beginTransaction();
-				
-		Set<Composite> composites = location.getComposite();
-				
-		session.getTransaction().commit();
-		
-		return composites;
-	}
-	
-	public void changeGoodLocation(String location) {
-		Session session = sessionFactory.getCurrentSession();		
-		session.beginTransaction();
-		
-		
-		session.getTransaction().commit();
-	}
+    protected SessionFactory sessionFactory;
 	
 	public <T extends AbstractEntity> T save(T entity, boolean evict) {
 		Session session = sessionFactory.getCurrentSession();
@@ -90,8 +53,37 @@ public class StockManager {
 	
 	public <T extends AbstractEntity> void delete(T entity) {
 		sessionFactory.getCurrentSession().delete(entity);
-	}	
+	}
 
+	public List<Unit> getAllUnits() {
+		Session session = sessionFactory.getCurrentSession();		
+		session.beginTransaction();
+				
+		List<Unit> list = session.createQuery("from Unit").list();
+				
+		session.getTransaction().commit();
+		
+		return list;
+	}
+	
+	public List<Category> getAllCategories() {
+		Session session = sessionFactory.getCurrentSession();		
+		session.beginTransaction();
+				
+		List<Category> list = session.createQuery("from Category").list();
+				
+		session.getTransaction().commit();
+		
+		return list;
+	}
+			
+	public void changeGoodLocation(String location) {
+		Session session = sessionFactory.getCurrentSession();		
+		session.beginTransaction();
+		
+		session.getTransaction().commit();
+	}
+	
 	public static Configuration getConfig() {
 		return config;
 	}
@@ -108,5 +100,4 @@ public class StockManager {
 		this.sessionFactory = sessionFactory;
 	}
 
-	
 }

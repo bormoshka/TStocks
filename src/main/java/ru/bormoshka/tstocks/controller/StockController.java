@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 import ru.bormoshka.tstocks.DAO.StockManager;
-import ru.bormoshka.tstocks.DAO.entities.Composite;
 import ru.bormoshka.tstocks.DAO.entities.Location;
 import ru.bormoshka.tstocks.DAO.entities.Unit;
 import ru.bormoshka.tstocks.controller.exception.SavingException;
@@ -23,11 +22,7 @@ public class StockController implements Serializable{
 	public List<Unit> getAllUnits() {
 		return manager.getAllUnits();
 	}
-	
-	public Set<Composite> getAllCompositeAtLocation(Location location) {
-		return location.getComposite();
-	}
-	
+		
 	public void saveUnit(Unit unit) throws SavingException {
 		
 		if(unit == null || !unit.validate()) {

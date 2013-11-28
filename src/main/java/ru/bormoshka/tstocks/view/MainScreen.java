@@ -8,6 +8,8 @@ import com.vaadin.event.dd.DropHandler;
 import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.Page;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
@@ -31,49 +33,52 @@ import java.util.Iterator;
 import java.util.Locale;
 import ru.bormoshka.tstocks.common.SpringContextHelper;
 import ru.bormoshka.tstocks.controller.StockController;
+import ru.bormoshka.tstocks.local.AppLocale;
 
 @Theme("dusty")
 @SuppressWarnings("serial")
 public class MainScreen extends UI {
 
-	protected final SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
-	protected final VerticalLayout layout = new VerticalLayout();
+	protected final static SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
 	protected final HorizontalLayout content = new HorizontalLayout();
-	
+
 	CssLayout root = new CssLayout();
 	CssLayout menu = new CssLayout();
-	
-	private Navigator nav;
-	
-	HashMap<String, Button> viewNameToMenuButton = new HashMap<String, Button>();
 
+	private Navigator nav;
+
+	protected final HashMap<String, Button> viewNameToMenuButton = new HashMap<String, Button>();
+	protected String[] enabledSidebarButtons;
+	
 	HashMap<String, Class<? extends View>> routes = new HashMap<String, Class<? extends View>>() {
 		{
+			put("/actual_data", DataView.class);
+			put("/stocking", StockingView.class);
+			put("/transactions", TransactionView.class);
+			put("/lists", ListsView.class);
 			put("/dashboard", BasicView.class);
 		}
 	};
 
 	@WebServlet(value = "/*", asyncSupported = true)
-	@VaadinServletConfiguration(productionMode = true,
-			ui = MainScreen.class,
-			widgetset = "ru.bormoshka.tstocks.view.AppWidgetSet")
+	@VaadinServletConfiguration(productionMode = false,
+			ui = MainScreen.class
+//			widgetset = "ru.bormoshka.tstocks.view.AppWidgetSet"
+		)
 	public static class Servlet extends VaadinServlet {
+		
 	}
 
 	@Override
 	protected void init(VaadinRequest request) {
-		setLocale(Locale.US);
 
+		setLocale(Locale.US);
+		menu.addStyleName("menu");
 		setContent(root);
 
-		layout.setSizeFull();
-
+		root.setSizeFull();
+		initNavigation();
 		initToolbar();
-
-		layout.addComponent(content);
-
-		content.setSizeFull();
-		setContent(layout);
 	}
 
 	private void initToolbar() {
@@ -87,14 +92,19 @@ public class MainScreen extends UI {
 						setWidth(null);
 						setHeight("100%");
 
-						addComponent(new CssLayout() {
-							{
-								addStyleName("branding");
-								Label logo = new Label(
-										"<span>tStocks</span> Dashboard",
+						addComponent(new HorizontalLayout() {
+							{								
+								Label logoSlogan = new Label(
+										"tStocks <span>Dashboard</span>",
 										ContentMode.HTML);
-								logo.setSizeUndefined();
-								addComponent(logo);
+								logoSlogan.setSizeUndefined();								
+								Image logoPic = new Image(null, 
+										new	ThemeResource("img/dusty-app-logo.png"));
+								logoPic.setStyleName("app-logo");								
+								addStyleName("branding");
+								addComponent(logoPic);
+								addComponent(logoSlogan);
+								
 							}
 						});
 						addComponent(menu);
@@ -103,16 +113,14 @@ public class MainScreen extends UI {
 				});
 				menu.removeAllComponents();
 
-				for (final String view : new String[]{"dashboard", "sales",
-					"transactions"}) {
-					Button b = new NativeButton(view.substring(0, 1).toUpperCase()
-							+ view.substring(1).replace('-', ' '));
+				for (final String view : enabledSidebarButtons) {
+					Button b = new NativeButton(AppLocale.get("sidebar_" + view));
 					b.addStyleName("icon-" + view);
 					b.addClickListener(new Button.ClickListener() {
 						@Override
 						public void buttonClick(Button.ClickEvent event) {
-							clearMenuSelection();
-							event.getButton().addStyleName("selected");
+							//clearMenuSelection();
+							//event.getButton().addStyleName("selected");
 							if (!nav.getState().equals("/" + view)) {
 								nav.navigateTo("/" + view);
 							}
@@ -159,5 +167,45 @@ public class MainScreen extends UI {
 						.removeStyleName("selected");
 			}
 		}
+	}
+
+	private void initNavigation() {
+		this.enabledSidebarButtons = new String[]{
+			"actual_data",
+			"stocking",
+			"transactions",
+			"lists"};
+		nav = new Navigator(this, content);
+		
+		for (String route : routes.keySet()) {
+			nav.addView(route, routes.get(route));
+		}
+		String uri = Page.getCurrent().getUriFragment();
+		if (uri != null && uri.startsWith("!")) {
+			uri = uri.substring(1);
+		}
+		if (uri == null || uri.equals("") || uri.equals("/")) {
+			nav.navigateTo("/dashboard");			
+		} else if (viewNameToMenuButton.containsKey(uri)) {
+			nav.navigateTo(uri);			
+		}
+		nav.addViewChangeListener(new ViewChangeListener() {
+			@Override
+			public void afterViewChange(ViewChangeListener.ViewChangeEvent event) {
+				clearMenuSelection();				
+				Button b = viewNameToMenuButton.get(event.getViewName());
+				if(b != null) {
+					b.addStyleName("selected");
+				}
+			}
+
+			@Override
+			public boolean beforeViewChange(ViewChangeListener.ViewChangeEvent event) {
+				return true;
+			}
+		});
+	}
+	public static SpringContextHelper getSpringHelper() {
+		return helper;
 	}
 }
