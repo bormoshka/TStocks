@@ -7,9 +7,7 @@
 package ru.bormoshka.tstocks.controller;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 import ru.bormoshka.tstocks.DAO.StockManager;
-import ru.bormoshka.tstocks.DAO.entities.Location;
 import ru.bormoshka.tstocks.DAO.entities.Unit;
 import ru.bormoshka.tstocks.controller.exception.SavingException;
 /**

@@ -9,6 +9,7 @@
  */
 package ru.bormoshka.tstocks.view;
 
+import com.sun.org.apache.xerces.internal.util.DOMUtil;
 import com.vaadin.data.fieldgroup.Caption;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -19,7 +20,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
-import ru.bormoshka.tstocks.local.AppLocale;
+import ru.bormoshka.tstocks.local.L;
 import ru.bormoshka.tstocks.view.extensions.FontIcon;
 
 public class BasicView extends VerticalLayout implements View {
@@ -44,8 +45,6 @@ public class BasicView extends VerticalLayout implements View {
 		viewIcon.setSpining(true);
 	}
 	protected void basicInit() {
-		//Label viewLabel = new Label(viewName);		
-		//viewLabel.addStyleName("view-name");
 		viewIcon = new FontIcon(iconStyle, "icon36");
 		viewMenu.addStyleName("view-menu");
 		
@@ -54,16 +53,10 @@ public class BasicView extends VerticalLayout implements View {
 		menuHelp.addItem("Report an error", null);
 		if (viewContent != null) {
 			addComponent(viewContent);
+			
 		}
+		setStyleName("main-screen");
 		panelLayout.addComponent(viewIcon);
 		panelLayout.addComponent(viewMenu);
-	}
-	
-	protected String localize(String string) {
-		try {
-			return AppLocale.get(string);
-		} catch (Exception e) {
-			return string;
-		}		
 	}
 }

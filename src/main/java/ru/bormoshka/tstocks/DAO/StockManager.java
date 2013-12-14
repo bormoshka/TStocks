@@ -5,10 +5,7 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.springframework.beans.factory.annotation.Autowired;
-import ru.bormoshka.tstocks.DAO.entities.AbstractEntity;
-import ru.bormoshka.tstocks.DAO.entities.Category;
-import ru.bormoshka.tstocks.DAO.entities.Unit;
+import ru.bormoshka.tstocks.DAO.entities.*;
 
 /**
  *
@@ -22,13 +19,13 @@ public class StockManager extends AbstractDAO {
 	
 	public <T extends AbstractEntity> T save(T entity, boolean evict) {
 		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
+//		session.beginTransaction();
 		entity.setId((Long) session.save(entity));
 		session.flush();
 		if (evict) {
 			session.evict(entity);
 		}
-		session.getTransaction().commit();
+//		session.getTransaction().commit();
 		return entity;
 	}
 	
@@ -57,31 +54,45 @@ public class StockManager extends AbstractDAO {
 
 	public List<Unit> getAllUnits() {
 		Session session = sessionFactory.getCurrentSession();		
-		session.beginTransaction();
+//		session.beginTransaction();
 				
 		List<Unit> list = session.createQuery("from Unit").list();
 				
-		session.getTransaction().commit();
+//		session.getTransaction().commit();
 		
+		return list;
+	}
+	
+	public List<LocationType> getAllLocationTypes() {
+		Session session = sessionFactory.getCurrentSession();		
+				
+		List<LocationType> list = session.createQuery("from LocationType").list();
+				
 		return list;
 	}
 	
 	public List<Category> getAllCategories() {
 		Session session = sessionFactory.getCurrentSession();		
-		session.beginTransaction();
+//		session.beginTransaction();
 				
 		List<Category> list = session.createQuery("from Category").list();
 				
-		session.getTransaction().commit();
+//		session.getTransaction().commit();
 		
 		return list;
+	}
+	
+	public Address getLocationAddress(Long locationID) {
+		Session session = sessionFactory.getCurrentSession();		
+				
+		Address address = (Address) session.createQuery("from Address where id = ?")
+											.setLong(1, locationID).uniqueResult();
+
+		return address;
 	}
 			
 	public void changeGoodLocation(String location) {
 		Session session = sessionFactory.getCurrentSession();		
-		session.beginTransaction();
-		
-		session.getTransaction().commit();
 	}
 	
 	public static Configuration getConfig() {

@@ -31,8 +31,9 @@ public class Location extends AbstractEntity implements java.io.Serializable {
 	@Column(name = "name", nullable = false, length = 512)
 	private String name;
 
-	@Column(name = "address", nullable = false)
-	private long address;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "address_id", referencedColumnName = "id")
+	private Address address = new Address();
 
 	@Column(name = "room", nullable = false, length = 45)
 	private String room;
@@ -47,7 +48,7 @@ public class Location extends AbstractEntity implements java.io.Serializable {
 	public Location() {
 	}
 
-	public Location(String name, long address, String room, LocationType type) {
+	public Location(String name, Address address, String room, LocationType type) {
 		this.name = name;
 		this.address = address;
 		this.room = room;
@@ -70,11 +71,11 @@ public class Location extends AbstractEntity implements java.io.Serializable {
 		this.name = name;
 	}
 
-	public long getAddress() {
-		return this.address;
+	public Address getAddress() {
+		return address;
 	}
 
-	public void setAddress(long address) {
+	public void setAddress(Address address) {
 		this.address = address;
 	}
 

@@ -6,17 +6,15 @@
 package ru.bormoshka.tstocks.view;
 
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.ui.AbstractLayout;
-import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.Notification;
 import ru.bormoshka.tstocks.DAO.StockManager;
-import ru.bormoshka.tstocks.DAO.entities.Category;
-import static ru.bormoshka.tstocks.view.MainScreen.helper;
+import ru.bormoshka.tstocks.DAO.entities.*;
+import ru.bormoshka.tstocks.local.L;
 import ru.bormoshka.tstocks.view.extensions.FontIcon;
-import ru.bormoshka.tstocks.view.forms.NewCategoryLayout;
 
 /**
  *
@@ -32,7 +30,7 @@ public class ListsView extends BasicView {
 		viewName = "Lists View";
 		iconStyle = FontIcon.Name.LIST;
 		
-		viewContent = new HorizontalLayout();
+		viewContent = new CssLayout();
 		viewContent.addComponent(new Label("dat content"));
 		
 		buildMenu();
@@ -44,22 +42,16 @@ public class ListsView extends BasicView {
 	}
 
 	protected void buildMenu() {
-
-		MenuBar.MenuItem createItem = this.viewMenu.addItem(localize("list_new"), null);
-		createItem.addItem(localize("list_new_unit_type"), getDummyCommand());
-		createItem.addItem(localize("list_new_location"), getDummyCommand());
-		createItem.addItem(localize("list_new_location_type"), getDummyCommand());
-		createItem.addItem(localize("list_new_category"), getCommand(new NewCategoryLayout(model)));
-
-		MenuBar.MenuItem managementItem = this.viewMenu.addItem(localize("list_edit"), null);
-		managementItem.addItem(localize("list_edit_unit_type"), getDummyCommand());
-		managementItem.addItem(localize("list_edit_location"), getDummyCommand());
-		managementItem.addItem(localize("list_edit_location_type"), getDummyCommand());
-		managementItem.addItem(localize("list_edit_category"), getDummyCommand());
+		MenuBar.MenuItem managementItem = this.viewMenu.addItem(L.get("list_edit"), null);
+		managementItem.addItem(L.get("list_edit_unit_type"), getDummyCommand());
+		managementItem.addItem(L.get("list_edit_location"), getCommand(Location.class));
+		managementItem.addItem(L.get("list_edit_location_type"), getCommand(LocationType.class));
+		managementItem.addItem(L.get("list_edit_address"), getCommand(Address.class));
+		managementItem.addItem(L.get("list_edit_category"), getCommand(Category.class));
 	}
 
-	protected MenuBar.Command getCommand(AbstractLayout newContent) {
-		return new MenuCommand(viewContent, newContent, model);
+	protected MenuBar.Command getCommand(Class newContentClass) {
+		return new MenuCommand(viewContent, newContentClass);
 	}
 
 	protected MenuBar.Command getDummyCommand() {

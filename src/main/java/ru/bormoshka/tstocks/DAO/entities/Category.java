@@ -24,7 +24,7 @@ public class Category extends AbstractEntity implements java.io.Serializable {
 	@Column(name = "name", unique = true, nullable = false, length = 45)
 	private String name = "";
 
-	@Column(name = "description", length = 65535)
+	@Column(name = "description", columnDefinition="TEXT")
 	private String description = "";
 
 	public Category() {

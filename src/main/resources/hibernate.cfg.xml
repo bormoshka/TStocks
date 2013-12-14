@@ -24,6 +24,7 @@
     <mapping class="ru.bormoshka.tstocks.DAO.entities.Category"/>
     <mapping class="ru.bormoshka.tstocks.DAO.entities.Status"/> 
 	<mapping class="ru.bormoshka.tstocks.DAO.entities.UnitTypeConnection"/>
+	<mapping class="ru.bormoshka.tstocks.DAO.entities.Address"/>
    
   </session-factory>
 </hibernate-configuration>

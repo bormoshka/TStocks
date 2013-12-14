@@ -3,9 +3,6 @@ package ru.bormoshka.tstocks.view;
 import javax.servlet.annotation.WebServlet;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
-import com.vaadin.event.dd.DragAndDropEvent;
-import com.vaadin.event.dd.DropHandler;
-import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -14,8 +11,6 @@ import com.vaadin.server.ThemeResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.AbstractLayout;
-import com.vaadin.ui.AbstractSelect;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
@@ -23,17 +18,14 @@ import com.vaadin.ui.DragAndDropWrapper;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.NativeButton;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import ru.bormoshka.tstocks.common.SpringContextHelper;
-import ru.bormoshka.tstocks.controller.StockController;
-import ru.bormoshka.tstocks.local.AppLocale;
+import ru.bormoshka.tstocks.local.L;
 
 @Theme("dusty")
 @SuppressWarnings("serial")
@@ -60,7 +52,7 @@ public class MainScreen extends UI {
 		}
 	};
 
-	@WebServlet(value = "/*", asyncSupported = true)
+	@WebServlet(value = {"/app/*", "/VAADIN/*"}, asyncSupported = true)
 	@VaadinServletConfiguration(productionMode = false,
 			ui = MainScreen.class
 //			widgetset = "ru.bormoshka.tstocks.view.AppWidgetSet"
@@ -114,7 +106,7 @@ public class MainScreen extends UI {
 				menu.removeAllComponents();
 
 				for (final String view : enabledSidebarButtons) {
-					Button b = new NativeButton(AppLocale.get("sidebar_" + view));
+					Button b = new NativeButton(L.get("sidebar_" + view));
 					b.addStyleName("icon-" + view);
 					b.addClickListener(new Button.ClickListener() {
 						@Override
@@ -140,24 +132,8 @@ public class MainScreen extends UI {
 		});
 	}
 
-	private void attachStockController(AbstractLayout layout) {
-		Button btnViewUnits = new NativeButton("View Units");
-		Button btnAddUnit = new NativeButton("ADD");
-
-		layout.addComponent(btnViewUnits);
-		layout.addComponent(btnAddUnit);
-
-		StockController stock = (StockController) helper.getBean("stockController");
-
-		layout.addComponent(btnViewUnits);
-		layout.addComponent(btnAddUnit);
-
-		btnViewUnits.addClickListener(new ViewButtonClickListener(content, stock));
-		btnAddUnit.addClickListener(new AddButtonClickListener(content, stock));
-	}
-
 	private void clearMenuSelection() {
-		for (Iterator<Component> it = menu.getComponentIterator(); it.hasNext();) {
+		for (Iterator<Component> it = menu.iterator(); it.hasNext();) {
 			Component next = it.next();
 			if (next instanceof NativeButton) {
 				next.removeStyleName("selected");

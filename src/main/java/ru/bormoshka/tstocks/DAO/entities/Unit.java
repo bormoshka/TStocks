@@ -1,6 +1,7 @@
 package ru.bormoshka.tstocks.DAO.entities;
 // Generated Nov 21, 2013 2:12:48 AM by Hibernate Tools 3.6.0
 
+import ru.bormoshka.tstocks.DAO.entities.enums.Status;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;

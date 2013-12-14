@@ -13,7 +13,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "LocationType")
-public class LocationType implements java.io.Serializable {
+public class LocationType extends AbstractEntity {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -23,7 +23,7 @@ public class LocationType implements java.io.Serializable {
 	@Column(name = "name", length = 45)
 	private String name;
 
-	@Column(name = "description", length = 65535)
+	@Column(name = "description", columnDefinition="TEXT")
 	private String description;
 
 	public LocationType() {
@@ -37,7 +37,7 @@ public class LocationType implements java.io.Serializable {
 	public Long getId() {
 		return this.id;
 	}
-
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -57,5 +57,12 @@ public class LocationType implements java.io.Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
+	
+	
 
 }

@@ -72,4 +72,34 @@
 			}
 		}
 	}
+	.v-table-row,.v-table-row-odd {
+		.v-textfield{
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			padding: 2px 3px;
+			border: 1px solid #ccc;
+			background: none;
+			border-radius: none;
+		}
+		
+	}
+	.v-table-row-odd {
+		.v-textfield{
+			background-color: #eff0f1;			
+		}		
+	}
+	.main-screen,
+	.view-content,
+	.v-slot-view-content,
+	.h-split-panel {
+		height: 100%;
+	}
+	.new-entity-form {
+		padding: 15px;
+		.form-name-label {
+			@include font-define(#444, 16px, inherit, bold);
+			text-shadow: 1px 1px 0px #fff;
+		}
+	}
 }

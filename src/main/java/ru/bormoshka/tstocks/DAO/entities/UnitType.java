@@ -35,7 +35,7 @@ public class UnitType extends AbstractEntity implements java.io.Serializable {
 	@Column(name = "name", length = 120)
 	private String name;
 
-	@Column(name = "description", length = 65535)
+	@Column(name = "description", columnDefinition="TEXT")
 	private String description;
 
 	@ManyToOne(fetch = FetchType.EAGER)

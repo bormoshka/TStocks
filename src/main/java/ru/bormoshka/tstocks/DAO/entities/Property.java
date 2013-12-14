@@ -24,10 +24,10 @@ public class Property implements java.io.Serializable {
 	protected Long id;
 
 	@Column(name = "name", length = 45)
-	protected String name;
+	protected String name = "";
 
-	@Column(name = "description", length = 65535)
-	protected String description;
+	@Column(name = "description", columnDefinition="TEXT")
+	protected String description = "";
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "category_id", nullable = false, referencedColumnName = "id")

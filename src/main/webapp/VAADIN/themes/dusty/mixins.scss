@@ -6,7 +6,14 @@
 		content: $char;
 	}
 }
-
+@mixin font-define($c, $s, $style, $weight) {
+	color: $c;
+	font-size: $s;
+	@if $style == null { font-style: inherit;}
+	@if $style != null { font-style: $style;}
+	@if $weight == null { font-weight: inherit; }
+	@if $weight != null { font-weight: $weight; }
+}
 
 @mixin box-sizing($b) {
 	-webkit-box-sizing: $b;
